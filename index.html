@@ -204,6 +204,106 @@
                         opacity 0.2s ease;
         }
 
+        /* Traditional Thai Glon-Nirat 2-Column Book Typesetting (จัดหน้าแบบบทกลอนสุภาพ/นิราศแท้) */
+        .glon-block {
+            display: grid;
+            grid-template-columns: max-content max-content;
+            column-gap: clamp(14px, 2.1em, 30px);
+            row-gap: 2px;
+            width: fit-content;
+            min-width: max-content;
+            margin: 0 auto;
+            font-family: var(--font-poem);
+            font-weight: 500;
+            color: #451a03;
+            font-variant-numeric: thai;
+        }
+        .glon-row {
+            display: contents;
+        }
+        .glon-wak {
+            position: relative;
+            white-space: nowrap;
+            text-align: left;
+            line-height: 1.62;
+        }
+        .glon-left {
+            padding-left: 1.12em;
+        }
+        .glon-fuang {
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #b45309;
+            font-weight: 700;
+        }
+        .glon-right .glon-fuang {
+            left: -1.1em;
+        }
+        .glon-angkhann {
+            color: #b45309;
+            font-weight: 700;
+            margin-left: 0.2em;
+        }
+        .glon-stanza-gap {
+            grid-column: 1 / -1;
+            height: 7px;
+        }
+        .glon-section-gap {
+            grid-column: 1 / -1;
+            height: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .glon-section-gap::after {
+            content: '• ❖ •';
+            font-size: 0.72em;
+            letter-spacing: 0.25em;
+            color: rgba(180, 83, 9, 0.42);
+        }
+
+        #panelPoemScroll {
+            max-height: 152px;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(180, 83, 9, 0.28) transparent;
+        }
+        #panelPoem .glon-block {
+            font-size: clamp(9.4px, 0.78vw, 10.6px);
+            column-gap: clamp(10px, 1.3em, 16px);
+        }
+        #panelPoem .glon-left {
+            padding-left: 0.9em;
+        }
+        #panelPoem .glon-right .glon-fuang {
+            left: -0.95em;
+        }
+        #sidePanel.expanded #panelPoemScroll {
+            max-height: 280px;
+        }
+        #sidePanel.expanded #panelPoem .glon-block {
+            font-size: clamp(11.8px, 1vw, 13.5px);
+            column-gap: clamp(14px, 2.1em, 30px);
+        }
+        #sidePanel.expanded #panelPoem .glon-left {
+            padding-left: 1.12em;
+        }
+        #sidePanel.expanded #panelPoem .glon-right .glon-fuang {
+            left: -1.1em;
+        }
+        #poemModalBody .glon-block {
+            font-size: clamp(10.2px, 2.55vw, 15.5px);
+            row-gap: 4px;
+            column-gap: clamp(14px, 2.1em, 34px);
+        }
+        #poemModalBody .glon-stanza-gap {
+            height: 11px;
+        }
+        #poemModalBody .glon-section-gap {
+            height: 22px;
+        }
+
         /* Hide long story description in compact mode; show when user clicks Expand! */
         #sidePanel:not(.expanded) #panelDesc {
             display: none;
@@ -230,7 +330,13 @@
                 gap: 5px;
             }
             #sidePanel.expanded {
-                max-height: 72dvh;
+                max-height: 74dvh;
+            }
+            #sidePanel.expanded #panelPoemScroll {
+                max-height: 205px;
+            }
+            #sidePanel.expanded #panelPoem .glon-block {
+                font-size: 10.8px;
             }
             #sidePanel.collapsed {
                 transform: translateY(calc(100% + 20px));
@@ -244,7 +350,7 @@
             }
         }
 
-        /* 2. Tablet / Side-Pane / Medium Screens (640px - 1023px): Hug content height, compact 220px-245px width */
+        /* 2. Tablet / Side-Pane / Medium Screens (640px - 1023px): Hug content height, compact width for clean 2-col glon */
         @media (min-width: 640px) and (max-width: 1023px) {
             #sidePanel {
                 top: 10px;
@@ -252,11 +358,11 @@
                 bottom: auto;
                 height: auto;
                 max-height: calc(100dvh - 20px);
-                width: clamp(210px, 26vw, 245px);
+                width: clamp(248px, 29vw, 292px);
                 border-radius: 20px;
             }
             #sidePanel.expanded {
-                width: min(360px, calc(100vw - 20px));
+                width: min(490px, calc(100vw - 20px));
             }
             #sidePanel.collapsed {
                 transform: translateX(calc(100% + 20px));
@@ -264,11 +370,11 @@
                 pointer-events: none;
             }
             body.panel-open #topHudBar {
-                max-width: calc(100vw - clamp(210px, 26vw, 245px) - 24px);
+                max-width: calc(100vw - clamp(248px, 29vw, 292px) - 24px);
             }
         }
 
-        /* 3. Desktop & Ultrawide Screens (>= 1024px): Hug content height, compact 235px-265px width */
+        /* 3. Desktop & Ultrawide Screens (>= 1024px): Sleek right card sizing for 2-column Thai poem readability */
         @media (min-width: 1024px) {
             #sidePanel {
                 top: 12px;
@@ -276,11 +382,11 @@
                 bottom: auto;
                 height: auto;
                 max-height: calc(100dvh - 24px);
-                width: clamp(230px, 21vw, 265px);
+                width: clamp(324px, 26.8vw, 376px);
                 border-radius: 20px;
             }
             #sidePanel.expanded {
-                width: min(390px, 36vw);
+                width: min(560px, 46vw);
             }
             #sidePanel.collapsed {
                 transform: translateX(calc(100% + 24px));
@@ -288,7 +394,7 @@
                 pointer-events: none;
             }
             body.panel-open #topHudBar {
-                max-width: calc(100vw - clamp(230px, 21vw, 265px) - 28px);
+                max-width: calc(100vw - clamp(324px, 26.8vw, 376px) - 28px);
             }
         }
 
@@ -767,6 +873,21 @@
                         </svg>
                     </button>
 
+                    <button id="btnMenuFullPoem" type="button" class="ios-menu-row">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <span class="w-8 h-8 rounded-xl bg-amber-500/14 text-amber-700 flex items-center justify-center shrink-0 text-sm">
+                                📜
+                            </span>
+                            <span class="min-w-0">
+                                <span class="block text-xs font-semibold text-slate-800 leading-tight">สมุดบทกลอนฉบับเต็ม</span>
+                                <span class="block text-[10px] text-slate-500 truncate mt-0.5">นิราศภูเขาทอง ครบทั้ง ๘๘ บท</span>
+                            </span>
+                        </span>
+                        <svg class="w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+
                     <button id="btnCamMode" type="button" class="ios-menu-row">
                         <span class="flex items-center gap-2.5 min-w-0">
                             <span class="w-8 h-8 rounded-xl bg-indigo-500/12 text-indigo-600 flex items-center justify-center shrink-0">
@@ -846,6 +967,10 @@
                 <h2 id="panelTitle" class="font-display text-xs sm:text-[13px] text-slate-800 truncate">วัดราชบูรณราชวรวิหาร</h2>
             </div>
             <div class="flex items-center gap-0.5 shrink-0">
+                <button id="btnHeaderPoem" type="button" class="px-1.5 h-6 rounded-lg bg-amber-100/90 hover:bg-amber-200/80 text-amber-800 flex items-center gap-1 text-[10px] font-semibold transition" title="เปิดอ่านบทกลอนจัดหน้าแบบหนังสือ">
+                    <span>📜</span>
+                    <span class="sm:hidden">บทกลอน</span>
+                </button>
                 <button id="btnExpandPanel" class="w-6 h-6 rounded-lg hover:bg-slate-200/60 text-slate-600 flex items-center justify-center text-[10px] transition" title="ขยายอ่านเนื้อเรื่อง / ย่อขนาด">
                     <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
@@ -858,8 +983,19 @@
         </div>
 
         <div class="panel-body p-2.5 sm:p-3 overflow-y-auto flex-1 space-y-2">
-            <div id="panelPoemBox" class="bg-amber-50/80 border border-amber-200/70 rounded-xl p-2">
-                <p id="panelPoem" class="font-poem text-[13px] sm:text-sm text-amber-950 whitespace-pre-line leading-snug"></p>
+            <div id="panelPoemBox" class="bg-amber-50/90 border border-amber-200/80 rounded-xl p-2 shadow-inner">
+                <div class="flex items-center justify-between gap-1.5 pb-1.5 mb-1.5 border-b border-amber-200/70">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="text-[10px] font-bold text-amber-900 truncate">📜 บทกลอนนิราศ</span>
+                        <span id="panelPoemMeta" class="text-[9px] font-semibold text-amber-800 bg-amber-100/90 px-1.5 py-0.5 rounded-full shrink-0"></span>
+                    </div>
+                    <button id="btnOpenPoemModal" type="button" class="text-[10px] font-semibold text-sky-700 hover:text-sky-900 bg-white/80 hover:bg-white border border-amber-200/90 px-2 py-0.5 rounded-lg transition shrink-0">
+                        📖 อ่านเต็มหน้า
+                    </button>
+                </div>
+                <div id="panelPoemScroll" class="pr-0.5">
+                    <div id="panelPoem" class="font-poem text-amber-950"></div>
+                </div>
             </div>
 
             <p id="panelDesc" class="text-[11px] text-slate-600 leading-snug"></p>
@@ -884,6 +1020,39 @@
                 <button id="btnCloseDir" class="w-8 h-8 rounded-xl hover:bg-slate-200/60 text-slate-600 flex items-center justify-center text-sm">✕</button>
             </div>
             <div id="directoryGrid" class="relative overflow-y-auto overflow-x-hidden rounded-2xl flex-1"></div>
+        </div>
+    </div>
+
+    <!-- Authentic Traditional Glon Book Reader Modal -->
+    <div id="poemModal" class="fixed inset-0 z-40 bg-slate-900/55 backdrop-blur-md hidden items-center justify-center p-2.5 sm:p-5">
+        <div class="minimal-glass max-w-3xl w-full max-h-[90dvh] flex flex-col p-3.5 sm:p-5 rounded-[26px] border-2 border-white shadow-2xl">
+            <div class="flex items-start justify-between gap-2 pb-2.5 border-b border-slate-200/80 shrink-0">
+                <div class="min-w-0">
+                    <h2 class="font-display text-base sm:text-lg text-slate-800 leading-tight">📜 นิราศภูเขาทอง : สุนทรภู่</h2>
+                    <p id="poemModalSub" class="text-[11px] text-slate-500 mt-0.5 truncate">บทประพันธ์ตรงตามต้นฉบับ จัดหน้ากลอนนิราศ ๒ คอลัมน์</p>
+                </div>
+                <button id="btnClosePoemModal" type="button" class="w-8 h-8 rounded-xl hover:bg-slate-200/70 text-slate-600 flex items-center justify-center text-sm shrink-0">✕</button>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 py-2.5 shrink-0">
+                <div class="inline-flex p-1 rounded-xl bg-slate-100/90 border border-slate-200/70">
+                    <button id="btnPoemTabStation" type="button" class="px-3 py-1 rounded-lg text-[11px] font-semibold transition bg-white text-sky-700 shadow-sm">
+                        📍 เฉพาะด่านนี้
+                    </button>
+                    <button id="btnPoemTabFull" type="button" class="px-3 py-1 rounded-lg text-[11px] font-semibold transition text-slate-600 hover:text-slate-800">
+                        📚 ครบทั้งเรื่อง (๘๘ บท)
+                    </button>
+                </div>
+
+                <div id="poemModalNav" class="flex items-center gap-1.5">
+                    <button id="btnPoemPrev" type="button" class="minimal-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold">◀ ด่านก่อน</button>
+                    <span id="poemModalCounter" class="text-[11px] font-semibold text-slate-600 px-1.5 tabular-nums">๑ / ๒๒</span>
+                    <button id="btnPoemNext" type="button" class="minimal-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold">ด่านถัดไป ▶</button>
+                </div>
+            </div>
+
+            <div id="poemModalBody" class="flex-1 overflow-y-auto overflow-x-auto rounded-2xl bg-gradient-to-b from-amber-50/95 via-[#fffdf6] to-amber-50/90 border border-amber-200/80 p-3 sm:p-6 shadow-inner space-y-5">
+            </div>
         </div>
     </div>
 
@@ -5100,7 +5269,7 @@
         }
 
         window.addEventListener('pointermove', (e) => {
-            if (e.target.closest('aside') || e.target.closest('button') || e.target.closest('#directoryModal')) {
+            if (e.target.closest('aside') || e.target.closest('button') || e.target.closest('#directoryModal') || e.target.closest('#poemModal')) {
                 tooltip.classList.add('opacity-0');
                 return;
             }
@@ -5124,7 +5293,7 @@
         });
 
         window.addEventListener('click', (e) => {
-            if (e.target.closest('aside') || e.target.closest('button') || e.target.closest('#directoryModal') || e.target.closest('#victoryModal')) return;
+            if (e.target.closest('aside') || e.target.closest('button') || e.target.closest('#directoryModal') || e.target.closest('#poemModal') || e.target.closest('#victoryModal')) return;
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
@@ -5158,6 +5327,211 @@
             });
         }
 
+        const poemModalEl = document.getElementById('poemModal');
+        const poemModalBody = document.getElementById('poemModalBody');
+        const poemModalSub = document.getElementById('poemModalSub');
+        const poemModalNav = document.getElementById('poemModalNav');
+        const poemModalCounter = document.getElementById('poemModalCounter');
+        const btnPoemTabStation = document.getElementById('btnPoemTabStation');
+        const btnPoemTabFull = document.getElementById('btnPoemTabFull');
+        const btnPoemPrev = document.getElementById('btnPoemPrev');
+        const btnPoemNext = document.getElementById('btnPoemNext');
+        const poemModalState = {
+            mode: 'station',
+            stationIdx: 0
+        };
+
+        function stanzaStartsWithFuang(stanza) {
+            const firstRow = stanza && stanza.rows && stanza.rows[0];
+            if (!firstRow) return false;
+            return (firstRow[0] || '').trim().startsWith('๏') || (firstRow[1] || '').trim().startsWith('๏');
+        }
+
+        function stanzaEndsWithAngkhann(stanza) {
+            const rows = stanza && stanza.rows;
+            if (!rows || !rows.length) return false;
+            const lastRow = rows[rows.length - 1];
+            return (lastRow[1] || '').trim().endsWith('ฯ');
+        }
+
+        function buildGlonWakSpan(text, sideClass) {
+            const span = document.createElement('span');
+            span.className = `glon-wak ${sideClass}`;
+            let remaining = (text || '').trim();
+            if (!remaining) {
+                span.innerHTML = '&nbsp;';
+                return span;
+            }
+            if (remaining.startsWith('๏')) {
+                const fuang = document.createElement('span');
+                fuang.className = 'glon-fuang';
+                fuang.textContent = '๏';
+                span.appendChild(fuang);
+                remaining = remaining.slice(1).replace(/^\s+/, '');
+            }
+            if (remaining.endsWith('ฯ')) {
+                const bodyText = remaining.slice(0, -1).replace(/\s+$/, '');
+                if (bodyText) span.appendChild(document.createTextNode(bodyText));
+                const angkhann = document.createElement('span');
+                angkhann.className = 'glon-angkhann';
+                angkhann.textContent = 'ฯ';
+                span.appendChild(angkhann);
+            } else {
+                span.appendChild(document.createTextNode(remaining));
+            }
+            return span;
+        }
+
+        function appendGlonStanzasToGrid(grid, stanzas, prevStanza = null) {
+            (stanzas || []).forEach((stanza, sIdx) => {
+                const prev = sIdx === 0 ? prevStanza : stanzas[sIdx - 1];
+                if (prev) {
+                    const gap = document.createElement('div');
+                    const isSectionBoundary = stanzaEndsWithAngkhann(prev) || stanzaStartsWithFuang(stanza);
+                    gap.className = isSectionBoundary ? 'glon-section-gap' : 'glon-stanza-gap';
+                    grid.appendChild(gap);
+                }
+                (stanza.rows || []).forEach(([leftText, rightText]) => {
+                    const row = document.createElement('div');
+                    row.className = 'glon-row';
+                    row.appendChild(buildGlonWakSpan(leftText, 'glon-left'));
+                    row.appendChild(buildGlonWakSpan(rightText, 'glon-right'));
+                    grid.appendChild(row);
+                });
+            });
+        }
+
+        function buildGlonBlock(stanzas) {
+            const grid = document.createElement('div');
+            grid.className = 'glon-block';
+            appendGlonStanzasToGrid(grid, stanzas, null);
+            return grid;
+        }
+
+        function getStationStanzaRange(stationIdx) {
+            const prevTotal = STATIONS.slice(0, stationIdx).reduce((acc, s) => acc + ((s.poemStanzas && s.poemStanzas.length) || 0), 0);
+            const count = (STATIONS[stationIdx] && STATIONS[stationIdx].poemStanzas && STATIONS[stationIdx].poemStanzas.length) || 0;
+            const total = STATIONS.reduce((acc, s) => acc + ((s.poemStanzas && s.poemStanzas.length) || 0), 0);
+            return { start: prevTotal + 1, end: prevTotal + count, count, total };
+        }
+
+        function updatePoemModalTabsUI() {
+            const isStation = poemModalState.mode === 'station';
+            const activeCls = ['bg-white', 'text-sky-700', 'shadow-sm'];
+            const inactiveCls = ['text-slate-600', 'hover:text-slate-800'];
+            if (btnPoemTabStation && btnPoemTabFull) {
+                btnPoemTabStation.classList.remove(...activeCls, ...inactiveCls);
+                btnPoemTabFull.classList.remove(...activeCls, ...inactiveCls);
+                btnPoemTabStation.classList.add(...(isStation ? activeCls : inactiveCls));
+                btnPoemTabFull.classList.add(...(isStation ? inactiveCls : activeCls));
+            }
+            if (poemModalNav) {
+                poemModalNav.classList.toggle('hidden', !isStation);
+            }
+        }
+
+        function renderPoemModal() {
+            if (!poemModalBody) return;
+            updatePoemModalTabsUI();
+            poemModalBody.innerHTML = '';
+
+            if (poemModalState.mode === 'station') {
+                const idx = Math.max(0, Math.min(STATIONS.length - 1, poemModalState.stationIdx));
+                poemModalState.stationIdx = idx;
+                const st = STATIONS[idx];
+                const { start, end, count, total } = getStationStanzaRange(idx);
+                const cleanTitle = st.shortName || st.name.replace(/^\d+\.\s*/, '');
+                const rangeText = count > 1 ? `บทที่ ${toThaiNum(start)}–${toThaiNum(end)}` : `บทที่ ${toThaiNum(start)}`;
+
+                if (poemModalSub) {
+                    poemModalSub.textContent = `ด่านที่ ${toThaiNum(st.id)} : ${cleanTitle} · ${rangeText} (${toThaiNum(count)} จาก ${toThaiNum(total)} บท)`;
+                }
+                if (poemModalCounter) {
+                    poemModalCounter.textContent = `${toThaiNum(idx + 1)} / ${toThaiNum(STATIONS.length)}`;
+                }
+                if (btnPoemPrev) btnPoemPrev.disabled = idx === 0;
+                if (btnPoemNext) btnPoemNext.disabled = idx === STATIONS.length - 1;
+
+                const headerCard = document.createElement('div');
+                headerCard.className = 'flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-amber-200/80';
+                headerCard.innerHTML = `
+                    <div class="min-w-0">
+                        <div class="text-[11px] font-bold text-amber-800">📍 ด่านที่ ${toThaiNum(st.id)} · ${st.landmark || cleanTitle}</div>
+                        <div class="text-sm sm:text-base font-display text-amber-950">${cleanTitle}</div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-200 text-[11px] font-semibold shrink-0">${rangeText} (${toThaiNum(count)} บท)</span>
+                `;
+                poemModalBody.appendChild(headerCard);
+                poemModalBody.appendChild(buildGlonBlock(st.poemStanzas || []));
+                poemModalBody.scrollTop = 0;
+            } else {
+                const total = STATIONS.reduce((acc, s) => acc + ((s.poemStanzas && s.poemStanzas.length) || 0), 0);
+                const totalWaks = STATIONS.reduce((acc, s) => acc + (s.poemStanzas || []).reduce((sa, stz) => sa + (stz.rows || []).reduce((ra, [l, r]) => ra + (l && l.trim() ? 1 : 0) + (r && r.trim() ? 1 : 0), 0), 0), 0);
+                if (poemModalSub) {
+                    poemModalSub.textContent = `ฉบับสมบูรณ์ ครบทั้ง ๒๒ ด่าน · ${toThaiNum(total)} บทกลอน (${toThaiNum(totalWaks)} วรรค) ตามต้นฉบับกลอนนิราศ`;
+                }
+                const masterGrid = document.createElement('div');
+                masterGrid.className = 'glon-block';
+                let targetDivider = null;
+
+                STATIONS.forEach((st, idx) => {
+                    const prevStation = idx > 0 ? STATIONS[idx - 1] : null;
+                    const prevStanza = prevStation && prevStation.poemStanzas ? prevStation.poemStanzas[prevStation.poemStanzas.length - 1] : null;
+                    const firstStanza = st.poemStanzas && st.poemStanzas[0];
+                    if (prevStanza && firstStanza) {
+                        const gap = document.createElement('div');
+                        const isSectionBoundary = stanzaEndsWithAngkhann(prevStanza) || stanzaStartsWithFuang(firstStanza);
+                        gap.className = isSectionBoundary ? 'glon-section-gap' : 'glon-stanza-gap';
+                        masterGrid.appendChild(gap);
+                    }
+
+                    const { start, end, count } = getStationStanzaRange(idx);
+                    const rangeText = count > 1 ? `บทที่ ${toThaiNum(start)}–${toThaiNum(end)}` : `บทที่ ${toThaiNum(start)}`;
+                    const cleanTitle = st.shortName || st.name.replace(/^\d+\.\s*/, '');
+                    const isCurrent = idx === gameState.currentIdx;
+
+                    const divider = document.createElement('div');
+                    divider.style.gridColumn = '1 / -1';
+                    divider.style.width = '100%';
+                    divider.dataset.stationIdx = String(idx);
+                    divider.className = `flex items-center justify-between gap-2 px-2.5 py-1 my-1 rounded-xl border text-[10.5px] font-sans ${isCurrent ? 'bg-sky-100/85 border-sky-300 text-sky-900 shadow-sm' : 'bg-amber-100/55 border-amber-200/80 text-amber-900'}`;
+                    divider.innerHTML = `
+                        <span class="font-bold truncate">${isCurrent ? '⛵ ' : ''}ด่าน ${toThaiNum(st.id)} · ${cleanTitle}</span>
+                        <span class="text-[9.5px] font-semibold opacity-85 shrink-0">${rangeText}</span>
+                    `;
+                    masterGrid.appendChild(divider);
+                    if (isCurrent) targetDivider = divider;
+
+                    appendGlonStanzasToGrid(masterGrid, st.poemStanzas || [], null);
+                });
+
+                poemModalBody.appendChild(masterGrid);
+                if (targetDivider) {
+                    requestAnimationFrame(() => {
+                        targetDivider.scrollIntoView({ block: 'start', behavior: 'auto' });
+                    });
+                } else {
+                    poemModalBody.scrollTop = 0;
+                }
+            }
+        }
+
+        function openPoemModal(mode = 'station', stationIdx = gameState.currentIdx) {
+            if (!poemModalEl) return;
+            poemModalState.mode = mode === 'full' ? 'full' : 'station';
+            poemModalState.stationIdx = typeof stationIdx === 'number' ? stationIdx : gameState.currentIdx;
+            renderPoemModal();
+            poemModalEl.classList.remove('hidden');
+            poemModalEl.classList.add('flex');
+        }
+
+        function closePoemModal(playSound = true) {
+            if (!poemModalEl) return;
+            if (playSound && audioEngine) audioEngine.playUIClick();
+            poemModalEl.classList.add('hidden');
+            poemModalEl.classList.remove('flex');
+        }
+
         function renderSidePanelStation(idx) {
             const st = STATIONS[idx];
             document.getElementById('panelBadge').textContent = `ด่านที่ ${toThaiNum(st.id)} / ๒๒`;
@@ -5165,7 +5539,23 @@
             if (st.isMission) mBadge.classList.remove('hidden'); else mBadge.classList.add('hidden');
 
             document.getElementById('panelTitle').textContent = st.shortName || st.name.replace(/^\d+\.\s*/, '');
-            document.getElementById('panelPoem').textContent = st.poem || '';
+            const poemEl = document.getElementById('panelPoem');
+            poemEl.innerHTML = '';
+            if (Array.isArray(st.poemStanzas) && st.poemStanzas.length > 0) {
+                poemEl.appendChild(buildGlonBlock(st.poemStanzas));
+            } else {
+                const fallback = document.createElement('p');
+                fallback.className = 'text-[11px] leading-relaxed whitespace-pre-line';
+                fallback.textContent = st.poem || '';
+                poemEl.appendChild(fallback);
+            }
+            const poemMetaEl = document.getElementById('panelPoemMeta');
+            if (poemMetaEl) {
+                const { start, end, count } = getStationStanzaRange(idx);
+                poemMetaEl.textContent = count > 1 ? `บทที่ ${toThaiNum(start)}–${toThaiNum(end)}` : `บทที่ ${toThaiNum(start)}`;
+            }
+            const poemScrollEl = document.getElementById('panelPoemScroll');
+            if (poemScrollEl) poemScrollEl.scrollTop = 0;
             document.getElementById('panelDesc').textContent = st.story || '';
             document.getElementById('panelQuestion').textContent = st.question || '';
 
@@ -5300,7 +5690,12 @@
         }, { passive: true });
 
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && navDropdown && navDropdown.classList.contains('open')) {
+            if (e.key !== 'Escape') return;
+            if (poemModalEl && !poemModalEl.classList.contains('hidden')) {
+                closePoemModal(true);
+                return;
+            }
+            if (navDropdown && navDropdown.classList.contains('open')) {
                 setNavDropdownOpen(false);
             }
         });
@@ -5361,6 +5756,61 @@
             audioEngine.playUIClick();
             sidePanel.classList.toggle('expanded');
         };
+        document.getElementById('btnHeaderPoem').onclick = () => {
+            audioEngine.playUIClick();
+            openPoemModal('station', gameState.currentIdx);
+        };
+        document.getElementById('btnOpenPoemModal').onclick = () => {
+            audioEngine.playUIClick();
+            openPoemModal('station', gameState.currentIdx);
+        };
+        document.getElementById('btnMenuFullPoem').onclick = () => {
+            setNavDropdownOpen(false);
+            audioEngine.playUIClick();
+            openPoemModal('full', gameState.currentIdx);
+        };
+        document.getElementById('btnClosePoemModal').onclick = () => closePoemModal(true);
+        if (poemModalEl) {
+            poemModalEl.onclick = (e) => {
+                if (e.target === poemModalEl) closePoemModal(true);
+            };
+        }
+        if (btnPoemTabStation) {
+            btnPoemTabStation.onclick = () => {
+                if (poemModalState.mode !== 'station') {
+                    audioEngine.playUIClick();
+                    poemModalState.mode = 'station';
+                    renderPoemModal();
+                }
+            };
+        }
+        if (btnPoemTabFull) {
+            btnPoemTabFull.onclick = () => {
+                if (poemModalState.mode !== 'full') {
+                    audioEngine.playUIClick();
+                    poemModalState.mode = 'full';
+                    renderPoemModal();
+                }
+            };
+        }
+        if (btnPoemPrev) {
+            btnPoemPrev.onclick = () => {
+                if (poemModalState.stationIdx > 0) {
+                    audioEngine.playUIClick();
+                    poemModalState.stationIdx--;
+                    renderPoemModal();
+                }
+            };
+        }
+        if (btnPoemNext) {
+            btnPoemNext.onclick = () => {
+                if (poemModalState.stationIdx < STATIONS.length - 1) {
+                    audioEngine.playUIClick();
+                    poemModalState.stationIdx++;
+                    renderPoemModal();
+                }
+            };
+        }
         document.getElementById('btnHidePanel').onclick = () => hideSidePanel(true);
         btnShowSidePanel.onclick = showSidePanel;
         document.getElementById('btnQuizCardToggle').onclick = () => {
