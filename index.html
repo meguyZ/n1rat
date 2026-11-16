@@ -2,7 +2,12 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="apple-touch-icon" href="logo-nirat.png">
     <title>ตามรอยนิราศภูเขาทอง — 3D River Journey</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -30,7 +35,7 @@
             --font-poem: var(--font-ios);
             --font-body: var(--font-ios);
         }
-        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
@@ -38,13 +43,15 @@
             overflow: hidden; font-family: var(--font-body);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            -webkit-text-size-adjust: 100%;
+            overscroll-behavior: none;
             background: #7dd3fc; color: #1e293b;
             touch-action: none;
         }
-        button, input, select, textarea { font-family: var(--font-body); }
+        button, input, select, textarea { font-family: var(--font-body); touch-action: manipulation; }
         .font-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.01em; }
         .font-poem { font-family: var(--font-poem); font-weight: 500; }
-        #canvas-container { position: fixed; inset: 0; z-index: 1; width: 100%; height: 100%; }
+        #canvas-container { position: fixed; inset: 0; z-index: 1; width: 100%; height: 100%; touch-action: none; }
 
         .minimal-glass {
             background: rgba(255, 255, 255, 0.86);
@@ -60,10 +67,12 @@
             color: #1e293b;
             transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .minimal-btn:hover {
-            background: #ffffff;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+        @media (hover: hover) and (pointer: fine) {
+            .minimal-btn:hover {
+                background: #ffffff;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            }
         }
 
         .choice-btn {
@@ -72,10 +81,12 @@
             color: #1e293b;
             transition: all 0.16s ease;
         }
-        .choice-btn:hover:not(:disabled) {
-            background: #ffffff;
-            border-color: #0ea5e9;
-            transform: translateX(3px);
+        @media (hover: hover) and (pointer: fine) {
+            .choice-btn:hover:not(:disabled) {
+                background: #ffffff;
+                border-color: #0ea5e9;
+                transform: translateX(3px);
+            }
         }
 
         /* Responsive Top-Left Hamburger Capsule & Animated iOS Dropdown across ALL screen sizes */
@@ -83,7 +94,7 @@
             top: max(10px, env(safe-area-inset-top, 10px));
             left: max(10px, env(safe-area-inset-left, 10px));
             z-index: 25;
-            max-width: calc(100vw - 20px);
+            max-width: calc(100vw - 20px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
         }
 
         .hamburger-pill {
@@ -94,9 +105,11 @@
             box-shadow: 0 10px 26px -6px rgba(15, 23, 42, 0.14);
             transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease, box-shadow 0.18s ease;
         }
-        .hamburger-pill:hover {
-            background: rgba(255, 255, 255, 0.96);
-            box-shadow: 0 12px 30px -6px rgba(15, 23, 42, 0.18);
+        @media (hover: hover) and (pointer: fine) {
+            .hamburger-pill:hover {
+                background: rgba(255, 255, 255, 0.96);
+                box-shadow: 0 12px 30px -6px rgba(15, 23, 42, 0.18);
+            }
         }
         .hamburger-pill:active {
             transform: scale(0.97);
@@ -136,6 +149,9 @@
             transform: translateY(-8px) scale(0.95);
             pointer-events: none;
             transition: opacity 0.2s ease, transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
         }
         .ios-dropdown.open {
             opacity: 1;
@@ -156,10 +172,12 @@
             border: 1px solid rgba(226, 232, 240, 0.65);
             transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.14s ease;
         }
-        .ios-menu-row:hover {
-            background: #ffffff;
-            border-color: rgba(14, 165, 233, 0.38);
-            transform: translateY(-1px);
+        @media (hover: hover) and (pointer: fine) {
+            .ios-menu-row:hover {
+                background: #ffffff;
+                border-color: rgba(14, 165, 233, 0.38);
+                transform: translateY(-1px);
+            }
         }
         .ios-menu-row:active {
             transform: scale(0.985);
@@ -268,6 +286,22 @@
             overflow: auto;
             scrollbar-width: thin;
             scrollbar-color: rgba(180, 83, 9, 0.28) transparent;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-x pan-y;
+        }
+        #sidePanel .panel-body,
+        #directoryGrid,
+        #poemModalBody {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+        #sidePanel .panel-body,
+        #directoryGrid {
+            touch-action: pan-y;
+        }
+        #poemModalBody {
+            touch-action: pan-x pan-y;
         }
         #panelPoem .glon-block {
             font-size: clamp(9.4px, 0.78vw, 10.6px);
@@ -313,8 +347,8 @@
         @media (max-width: 639px) {
             #sidePanel {
                 top: auto !important;
-                left: 8px !important;
-                right: 8px !important;
+                left: max(8px, env(safe-area-inset-left, 8px)) !important;
+                right: max(8px, env(safe-area-inset-right, 8px)) !important;
                 bottom: max(8px, env(safe-area-inset-bottom, 8px)) !important;
                 width: auto !important;
                 height: auto !important;
@@ -339,49 +373,49 @@
                 font-size: 10.8px;
             }
             #sidePanel.collapsed {
-                transform: translateY(calc(100% + 20px));
+                transform: translateY(calc(100% + 28px));
                 opacity: 0;
                 pointer-events: none;
             }
             #btnShowSidePanel {
                 top: auto !important;
                 bottom: max(10px, env(safe-area-inset-bottom, 10px)) !important;
-                right: 10px !important;
+                right: max(10px, env(safe-area-inset-right, 10px)) !important;
             }
         }
 
         /* 2. Tablet / Side-Pane / Medium Screens (640px - 1023px): Hug content height, compact width for clean 2-col glon */
         @media (min-width: 640px) and (max-width: 1023px) {
             #sidePanel {
-                top: 10px;
-                right: 10px;
+                top: max(10px, env(safe-area-inset-top, 10px));
+                right: max(10px, env(safe-area-inset-right, 10px));
                 bottom: auto;
                 height: auto;
-                max-height: calc(100dvh - 20px);
+                max-height: calc(100dvh - max(20px, env(safe-area-inset-top, 10px) + env(safe-area-inset-bottom, 10px)));
                 width: clamp(248px, 29vw, 292px);
                 border-radius: 20px;
             }
             #sidePanel.expanded {
-                width: min(490px, calc(100vw - 20px));
+                width: min(490px, calc(100vw - 20px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
             }
             #sidePanel.collapsed {
-                transform: translateX(calc(100% + 20px));
+                transform: translateX(calc(100% + 28px));
                 opacity: 0;
                 pointer-events: none;
             }
             body.panel-open #topHudBar {
-                max-width: calc(100vw - clamp(248px, 29vw, 292px) - 24px);
+                max-width: calc(100vw - clamp(248px, 29vw, 292px) - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
             }
         }
 
         /* 3. Desktop & Ultrawide Screens (>= 1024px): Sleek right card sizing for 2-column Thai poem readability */
         @media (min-width: 1024px) {
             #sidePanel {
-                top: 12px;
-                right: 12px;
+                top: max(12px, env(safe-area-inset-top, 12px));
+                right: max(12px, env(safe-area-inset-right, 12px));
                 bottom: auto;
                 height: auto;
-                max-height: calc(100dvh - 24px);
+                max-height: calc(100dvh - max(24px, env(safe-area-inset-top, 12px) + env(safe-area-inset-bottom, 12px)));
                 width: clamp(324px, 26.8vw, 376px);
                 border-radius: 20px;
             }
@@ -389,28 +423,42 @@
                 width: min(560px, 46vw);
             }
             #sidePanel.collapsed {
-                transform: translateX(calc(100% + 24px));
+                transform: translateX(calc(100% + 32px));
                 opacity: 0;
                 pointer-events: none;
             }
             body.panel-open #topHudBar {
-                max-width: calc(100vw - clamp(324px, 26.8vw, 376px) - 28px);
+                max-width: calc(100vw - clamp(324px, 26.8vw, 376px) - 28px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
             }
         }
 
         /* 4. Short Landscape Viewports (e.g. Mobile Landscape height <= 520px) */
         @media (max-height: 520px) and (min-width: 640px) {
             #sidePanel {
-                top: 8px;
-                right: 8px;
+                top: max(8px, env(safe-area-inset-top, 8px));
+                right: max(8px, env(safe-area-inset-right, 8px));
                 bottom: auto;
-                max-height: calc(100dvh - 16px);
+                max-height: calc(100dvh - max(16px, env(safe-area-inset-top, 8px) + env(safe-area-inset-bottom, 8px)));
                 width: clamp(205px, 28vw, 240px);
             }
             #sidePanel .panel-body {
                 padding: 8px 10px;
                 gap: 6px;
             }
+        }
+
+        @media (min-width: 640px) {
+            #btnShowSidePanel {
+                top: max(12px, env(safe-area-inset-top, 12px));
+                right: max(12px, env(safe-area-inset-right, 12px));
+            }
+        }
+        #btnReopenVictory {
+            top: calc(max(12px, env(safe-area-inset-top, 12px)) + 40px);
+            right: max(12px, env(safe-area-inset-right, 12px));
+        }
+        #finaleBanner {
+            bottom: max(16px, env(safe-area-inset-bottom, 16px));
         }
 
         #stationTooltip {
@@ -436,6 +484,13 @@
             -webkit-backdrop-filter: blur(4px) saturate(1.1);
             transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
+            padding-top: max(16px, env(safe-area-inset-top, 16px));
+            padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+            padding-left: max(16px, env(safe-area-inset-left, 16px));
+            padding-right: max(16px, env(safe-area-inset-right, 16px));
         }
         #preloadScreen.leaving {
             opacity: 0;
@@ -564,9 +619,11 @@
             transform: rotate(-28deg);
             pointer-events: none;
         }
-        .sphere-bubble:hover {
-            transform: translateY(-4px) scale(1.06);
-            filter: brightness(1.04);
+        @media (hover: hover) and (pointer: fine) {
+            .sphere-bubble:hover {
+                transform: translateY(-4px) scale(1.06);
+                filter: brightness(1.04);
+            }
         }
         .sphere-bubble:active {
             transform: translateY(2px) scale(0.91);
@@ -1011,7 +1068,7 @@
 
     <!-- 2.5D Isometric River Diorama Map Modal -->
     <div id="directoryModal" class="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-md hidden items-center justify-center p-3 sm:p-5">
-        <div class="minimal-glass max-w-4xl w-full max-h-[88vh] flex flex-col p-4 sm:p-5 rounded-3xl shadow-2xl">
+        <div class="minimal-glass max-w-4xl w-full max-h-[88dvh] flex flex-col p-4 sm:p-5 rounded-3xl shadow-2xl">
             <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-200/80">
                 <div>
                     <h2 class="font-display text-lg sm:text-xl text-slate-800">แผนที่ลุ่มน้ำเจ้าพระยา 2.5D (๒๒ ด่านนิราศภูเขาทอง)</h2>
@@ -1151,6 +1208,10 @@
         // ==========================================
         // 0. REAL AUDIO PRELOADER & MULTI-CHANNEL THAI RIVERSIDE SOUNDSCAPE ENGINE
         // ==========================================
+        const canPlayOgg = typeof Audio !== 'undefined' && (() => {
+            try { return new Audio().canPlayType('audio/ogg; codecs="vorbis"') !== ''; } catch { return false; }
+        })();
+
         const audioEngine = {
             ctx: null,
             ambienceStarted: false,
@@ -1158,27 +1219,34 @@
             melodyTimer: null,
             birdTimer: null,
             chimeTimer: null,
-            riverAudio: new Audio('audio/river.ogg'),
-            birdsAudio: new Audio('audio/birds.ogg'),
-            rowAudio: new Audio('audio/row.ogg'),
-            chimeAudio: new Audio('audio/chime.ogg'),
+            riverSynthNode: null,
+            riverSynthGain: null,
+            oggFailed: !canPlayOgg,
+            riverAudio: canPlayOgg ? new Audio('audio/river.ogg') : null,
+            birdsAudio: canPlayOgg ? new Audio('audio/birds.ogg') : null,
+            rowAudio: canPlayOgg ? new Audio('audio/row.ogg') : null,
+            chimeAudio: canPlayOgg ? new Audio('audio/chime.ogg') : null,
 
             init() {
-                // Soft background river murmur (lowered so birds, Thai melody & wind chimes shine clearly!)
-                this.riverAudio.loop = true;
-                this.riverAudio.volume = 0.09;
-                this.riverAudio.preload = 'auto';
-
-                // Real forest birds recording boosted
-                this.birdsAudio.loop = true;
-                this.birdsAudio.volume = 0.55;
-                this.birdsAudio.preload = 'auto';
-
-                this.rowAudio.volume = 0.28;
-                this.rowAudio.preload = 'auto';
-
-                this.chimeAudio.volume = 0.42;
-                this.chimeAudio.preload = 'auto';
+                if (this.riverAudio) {
+                    this.riverAudio.loop = true;
+                    this.riverAudio.volume = 0.09;
+                    this.riverAudio.preload = 'auto';
+                    this.riverAudio.addEventListener('error', () => { this.oggFailed = true; });
+                }
+                if (this.birdsAudio) {
+                    this.birdsAudio.loop = true;
+                    this.birdsAudio.volume = 0.55;
+                    this.birdsAudio.preload = 'auto';
+                }
+                if (this.rowAudio) {
+                    this.rowAudio.volume = 0.28;
+                    this.rowAudio.preload = 'auto';
+                }
+                if (this.chimeAudio) {
+                    this.chimeAudio.volume = 0.42;
+                    this.chimeAudio.preload = 'auto';
+                }
             },
 
             ensureCtx() {
@@ -1186,20 +1254,71 @@
                 if (AudioCtx && !this.ctx) {
                     this.ctx = new AudioCtx();
                 }
-                if (this.ctx && this.ctx.state === 'suspended') {
+                if (this.ctx && this.ctx.state !== 'running') {
                     this.ctx.resume().catch(() => {});
                 }
                 return this.ctx;
             },
 
+            startRiverSynth() {
+                if (!this.ctx || this.riverSynthNode || this.ctx.state !== 'running') return;
+                try {
+                    const dur = 3.0;
+                    const bufSize = Math.floor(this.ctx.sampleRate * dur);
+                    const buf = this.ctx.createBuffer(1, bufSize, this.ctx.sampleRate);
+                    const data = buf.getChannelData(0);
+                    let lastOut = 0;
+                    for (let i = 0; i < bufSize; i++) {
+                        const white = Math.random() * 2 - 1;
+                        lastOut = (lastOut + 0.03 * white) / 1.03;
+                        data[i] = lastOut * 2.5;
+                    }
+                    const src = this.ctx.createBufferSource();
+                    src.buffer = buf;
+                    src.loop = true;
+                    const filter = this.ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 420;
+                    const gain = this.ctx.createGain();
+                    gain.gain.value = gameState.soundEnabled ? 0.045 : 0;
+                    src.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    src.start(0);
+                    this.riverSynthNode = src;
+                    this.riverSynthGain = gain;
+                } catch {}
+            },
+
             unlock() {
-                this.ensureCtx();
+                const ctx = this.ensureCtx();
+                if (ctx && ctx.state !== 'running') {
+                    try {
+                        const silentBuf = ctx.createBuffer(1, 1, 22050);
+                        const src = ctx.createBufferSource();
+                        src.buffer = silentBuf;
+                        src.connect(ctx.destination);
+                        src.start(0);
+                    } catch {}
+                }
                 if (!gameState.audioUnlocked) {
                     gameState.audioUnlocked = true;
                 }
                 if (gameState.soundEnabled) {
-                    this.riverAudio.play().catch(() => {});
-                    this.birdsAudio.play().catch(() => {});
+                    if (this.riverAudio && !this.oggFailed) {
+                        this.riverAudio.play().catch(() => {
+                            this.oggFailed = true;
+                            this.startRiverSynth();
+                        });
+                    } else {
+                        this.startRiverSynth();
+                    }
+                    if (this.birdsAudio && !this.oggFailed) {
+                        this.birdsAudio.play().catch(() => {});
+                    }
+                    if (this.riverSynthGain && this.ctx) {
+                        this.riverSynthGain.gain.setTargetAtTime(0.045, this.ctx.currentTime, 0.08);
+                    }
                     this.startAmbienceLoops();
                 }
             },
@@ -1500,8 +1619,11 @@
                     this.unlock();
                     this.playUIClick();
                 } else {
-                    this.riverAudio.pause();
-                    this.birdsAudio.pause();
+                    if (this.riverAudio) this.riverAudio.pause();
+                    if (this.birdsAudio) this.birdsAudio.pause();
+                    if (this.riverSynthGain && this.ctx) {
+                        this.riverSynthGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.05);
+                    }
                 }
             },
 
@@ -1715,9 +1837,22 @@
             }
         };
         audioEngine.init();
-        ['pointerdown', 'keydown', 'touchstart', 'wheel', 'click'].forEach(evt => {
-            window.addEventListener(evt, () => audioEngine.unlock(), { once: true, passive: true });
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIPhone = isIOS && Math.min(window.screen.width || 999, window.screen.height || 999) < 768;
+
+        const handleIOSAudioResume = () => {
+            if (!gameState.soundEnabled) return;
+            if (!gameState.audioUnlocked || !audioEngine.ctx || audioEngine.ctx.state !== 'running') {
+                audioEngine.unlock();
+            }
+        };
+        ['touchend', 'click', 'pointerup', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, handleIOSAudioResume, { passive: true });
         });
+
+        // Prevent iOS Safari whole-page pinch zoom while keeping OrbitControls pinch-zoom on the 3D canvas
+        document.addEventListener('gesturestart', (e) => { e.preventDefault(); }, { passive: false });
+        document.addEventListener('gesturechange', (e) => { e.preventDefault(); }, { passive: false });
 
         setPreloadProgress(30, 'กำลังสร้างฉากแม่น้ำและแสงแดด...');
 
@@ -1729,7 +1864,7 @@
         scene.background = new THREE.Color(0x8cd3ff);
         scene.fog = new THREE.FogExp2(0xc2e9ff, 0.0017);
 
-        const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.5, 950);
+        const camera = new THREE.PerspectiveCamera(42, (container.clientWidth || window.innerWidth) / Math.max(1, container.clientHeight || window.innerHeight), 0.5, 950);
         camera.position.set(-7.5, 4.2, 8.8);
 
         const renderer = new THREE.WebGLRenderer({
@@ -1737,9 +1872,9 @@
             powerPreference: 'high-performance',
             stencil: false
         });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
         // Cap pixelRatio at 1.5 for ultra-smooth 60 FPS on all devices while remaining razor sharp
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1760,14 +1895,15 @@
         const hemiLight = new THREE.HemisphereLight(0xe0f7fa, 0x3f6212, 0.58);
         scene.add(hemiLight);
 
-        // High-Contrast Directional Sunlight + Texel-Snapped 2048x2048 Shadows + Cool Rim Fill Light
+        // High-Contrast Directional Sunlight + Texel-Snapped Shadows (1024 on iPhone, 2048 on iPad/Desktop) + Cool Rim Fill Light
         const sunOffset = new THREE.Vector3(34, 48, 24);
         const sunDir = sunOffset.clone().normalize();
         const sunLight = new THREE.DirectionalLight(0xfffbeb, 3.15);
         sunLight.position.copy(sunOffset);
         sunLight.castShadow = true;
-        sunLight.shadow.mapSize.width = 2048;
-        sunLight.shadow.mapSize.height = 2048;
+        const shadowSize = isIPhone ? 1024 : 2048;
+        sunLight.shadow.mapSize.width = shadowSize;
+        sunLight.shadow.mapSize.height = shadowSize;
         sunLight.shadow.camera.near = 10;
         sunLight.shadow.camera.far = 128;
         const sd = 36;
@@ -5268,13 +5404,36 @@
             return gameState.completed.has(STATIONS[idx - 1].id) || gameState.completed.has(STATIONS[idx].id);
         }
 
+        let pointerDownPos = null;
+        let pointerMovedTooMuch = false;
+
+        window.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch') {
+                tooltip.classList.add('opacity-0');
+            }
+            if (!e.isPrimary) {
+                pointerMovedTooMuch = true;
+                return;
+            }
+            pointerDownPos = { x: e.clientX, y: e.clientY };
+            pointerMovedTooMuch = false;
+        }, { passive: true });
+
         window.addEventListener('pointermove', (e) => {
+            if (pointerDownPos && e.isPrimary) {
+                if (Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y) > 10) {
+                    pointerMovedTooMuch = true;
+                }
+            }
+            if (e.pointerType === 'touch') return;
             if (e.target.closest('aside') || e.target.closest('button') || e.target.closest('#directoryModal') || e.target.closest('#poemModal')) {
                 tooltip.classList.add('opacity-0');
                 return;
             }
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            const cw = container.clientWidth || window.innerWidth;
+            const ch = container.clientHeight || window.innerHeight;
+            mouse.x = (e.clientX / cw) * 2 - 1;
+            mouse.y = -(e.clientY / ch) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
             const hits = raycaster.intersectObjects(hitTargets);
             if (hits.length > 0) {
@@ -5290,12 +5449,18 @@
                 tooltip.classList.add('opacity-0');
                 document.body.style.cursor = 'default';
             }
-        });
+        }, { passive: true });
 
         window.addEventListener('click', (e) => {
-            if (e.target.closest('aside') || e.target.closest('button') || e.target.closest('#directoryModal') || e.target.closest('#poemModal') || e.target.closest('#victoryModal')) return;
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            if (pointerMovedTooMuch) {
+                pointerMovedTooMuch = false;
+                return;
+            }
+            if (e.target.closest('aside') || e.target.closest('button') || e.target.closest('#directoryModal') || e.target.closest('#poemModal') || e.target.closest('#victoryModal') || e.target.closest('#preloadScreen')) return;
+            const cw = container.clientWidth || window.innerWidth;
+            const ch = container.clientHeight || window.innerHeight;
+            mouse.x = (e.clientX / cw) * 2 - 1;
+            mouse.y = -(e.clientY / ch) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
             const hits = raycaster.intersectObjects(hitTargets);
             if (hits.length > 0) {
@@ -6047,7 +6212,10 @@
 
         handleViewportResize();
         window.addEventListener('resize', handleViewportResize);
-        window.addEventListener('orientationchange', () => setTimeout(handleViewportResize, 120));
+        window.addEventListener('orientationchange', () => {
+            setTimeout(handleViewportResize, 120);
+            setTimeout(handleViewportResize, 350);
+        });
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', handleViewportResize);
         }
@@ -6070,8 +6238,67 @@
         const _npcTanVec = new THREE.Vector3();
         const _npcNormVec = new THREE.Vector3();
 
+        let rafId = null;
+        let isContextLost = false;
+
+        function startRenderLoop() {
+            if (rafId !== null || isContextLost || document.hidden) return;
+            clock.getDelta();
+            rafId = requestAnimationFrame(animate);
+        }
+
+        function stopRenderLoop() {
+            if (rafId !== null) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+        }
+
+        renderer.domElement.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            isContextLost = true;
+            stopRenderLoop();
+        }, false);
+
+        renderer.domElement.addEventListener('webglcontextrestored', () => {
+            isContextLost = false;
+            handleViewportResize();
+            startRenderLoop();
+        }, false);
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopRenderLoop();
+                if (audioEngine.riverAudio) audioEngine.riverAudio.pause();
+                if (audioEngine.birdsAudio) audioEngine.birdsAudio.pause();
+                if (audioEngine.ctx && audioEngine.ctx.state === 'running') {
+                    audioEngine.ctx.suspend().catch(() => {});
+                }
+            } else {
+                handleViewportResize();
+                startRenderLoop();
+                if (gameState.soundEnabled && gameState.audioUnlocked) {
+                    audioEngine.unlock();
+                }
+            }
+        });
+
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                handleViewportResize();
+                startRenderLoop();
+                if (gameState.soundEnabled && gameState.audioUnlocked) {
+                    audioEngine.unlock();
+                }
+            }
+        });
+
         function animate() {
-            requestAnimationFrame(animate);
+            if (isContextLost || document.hidden) {
+                rafId = null;
+                return;
+            }
+            rafId = requestAnimationFrame(animate);
             const dt = Math.min(clock.getDelta(), 0.05);
             const elapsed = clock.getElapsedTime();
 
@@ -6184,8 +6411,8 @@
             updateCrocAndSplash(elapsed, dt);
             updateGiantCelebration(elapsed, dt);
 
-            const vw = window.innerWidth;
-            const vh = window.innerHeight;
+            const vw = container.clientWidth || window.innerWidth;
+            const vh = container.clientHeight || window.innerHeight;
             const isMobilePortrait = vw < 640;
             const isPanelOpen = !sidePanel.classList.contains('collapsed') && !document.body.classList.contains('preload-active');
             const aspectScale = vw / Math.max(1, vh) < 0.85 ? 1.18 : 1.0;
@@ -6230,7 +6457,7 @@
             controls.update();
             renderer.render(scene, camera);
         }
-        animate();
+        startRenderLoop();
 
         async function initExperience() {
             // Wait up to 4.5s for the optimized 3D hero boat, crocodile guard & giant celebration models
